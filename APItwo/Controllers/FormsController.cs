@@ -1,10 +1,12 @@
 ﻿using APItwo.Context;
+using APItwo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace APItwo.Controllers
 {
@@ -37,6 +39,19 @@ namespace APItwo.Controllers
             {
                 return InternalServerError();
             }
+        }
+
+        [ResponseType(typeof(Form))]
+        public IHttpActionResult Post(Form form)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            db.Forms.Add(form);
+            db.SaveChanges();
+
+            return Ok(new { id = form.Id });
         }
     }
 }
